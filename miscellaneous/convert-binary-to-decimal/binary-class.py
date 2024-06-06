@@ -37,15 +37,18 @@ class Binary:
                 else:
                     carry = '1'
                     final_b = '0' + final_b
-            if i - 1 == 0 and carry == '1':
+            if i == 0 and carry == '1':
                 final_b = '1' + final_b
-        return final_b
+        return Binary(str(final_b))
 
-b1 = Binary('10100')
-b2 = Binary('01101')
+b1 = Binary('10001011')
+b2 = Binary('00101101')
+b3 = None
 try:    
-    print(b1.add(b2))
+    b3 = b1.add(b2)
+    print(b1.to_dec())
+    print(b2.to_dec())
+    print(f"Binary Value: {b3.value}")
+    print(f"Decimal Value: {b3.to_dec()}")
 except InvalidBinaryOperationException as e:
     print('\nRan into an error: ' + e.args[0])
-
-print(b1.to_dec())
