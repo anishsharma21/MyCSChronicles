@@ -1,11 +1,19 @@
+from typing import Literal
+
+BinaryType = Literal['unsigned', 'signed', 'twos-complement']
+
 class InvalidBinaryOperationException(Exception):
     pass
 
 class Binary:
-    def __init__(self, value='') -> None:
+    def __init__(self, value='0', type: BinaryType='unsigned') -> None:
+        if type not in ['unsigned', 'signed', 'twos-complement']:
+            raise ValueError("Invalid type. Type must be one of 'unsigned', 'signed', 'twos-complement'")
         if not isinstance(value, str):
             raise ValueError("Input value must be a string")
+        
         self.value = value
+        self.type = type
 
     def to_dec(self):
         return sum([2**(len(self.value) - i - 1) if self.value[i] == '1' else 0 for i in range(len(self.value))])
@@ -41,14 +49,7 @@ class Binary:
                 final_b = '1' + final_b
         return Binary(str(final_b))
 
-b1 = Binary('10001011')
-b2 = Binary('00101101')
-b3 = None
-try:    
-    b3 = b1.add(b2)
-    print(b1.to_dec())
-    print(b2.to_dec())
-    print(f"Binary Value: {b3.value}")
-    print(f"Decimal Value: {b3.to_dec()}")
-except InvalidBinaryOperationException as e:
-    print('\nRan into an error: ' + e.args[0])
+b1 = Binary('1011', type='unsigned')
+b2 = Binary('0101')
+print(b1.add(b2).value)
+print(b1.add(b2).to_dec())
