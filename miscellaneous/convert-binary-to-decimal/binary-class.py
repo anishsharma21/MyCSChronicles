@@ -7,6 +7,9 @@ class Binary:
             raise ValueError("Input value must be a string")
         self.value = value
 
+    def to_dec(self):
+        return sum([2**(len(self.value) - i - 1) if self.value[i] == '1' else 0 for i in range(len(self.value))])
+
     def add(self, num):
         if isinstance(num, Binary):
             if len(num.value) == len(self.value):
@@ -19,18 +22,18 @@ class Binary:
     def _adder(self, b1, b2):
         final_b = ''
         carry = '0'
-        for i in range(len(b1), 0, -1):
+        for i in range(len(b1)-1, -1, -1):
             if carry == '0':
-                if b1[i-1] == b2[i-1]:
-                    carry = '1' if b1[i-1] == '1' else '0'
+                if b1[i] == b2[i]:
+                    carry = '1' if b1[i] == '1' else '0'
                     final_b = '0' + final_b
                 else:
                     carry = '0'
                     final_b = '1' + final_b
             else:
-                if b1[i-1] == b2[i-1]:
-                    carry = '1' if b1[i-1] == '1' else '0'
-                    final_b = '1' + final_b if b1[i-1] == '0' else '0' + final_b
+                if b1[i] == b2[i]:
+                    carry = '1' if b1[i] == '1' else '0'
+                    final_b = '1' + final_b if b1[i] == '0' else '0' + final_b
                 else:
                     carry = '1'
                     final_b = '0' + final_b
@@ -44,3 +47,5 @@ try:
     print(b1.add(b2))
 except InvalidBinaryOperationException as e:
     print('\nRan into an error: ' + e.args[0])
+
+print(b1.to_dec())
