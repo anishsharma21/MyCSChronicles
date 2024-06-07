@@ -16,9 +16,21 @@ class Binary:
         self.type = type
 
     def to_dec(self):
-        return sum([2**(len(self.value) - i - 1) if self.value[i] == '1' else 0 for i in range(len(self.value))])
+        if self.type == 'unsigned':
+            return sum([2**(len(self.value) - i - 1) if self.value[i] == '1' else 0 for i in range(len(self.value))])
+        elif self.type == 'signed':
+            base_dec = sum([2**(len(self.value) - i - 1) if self.value[i] == '1' else 0 for i in range(1, len(self.value))])
+            return -base_dec if self.value[0] == '1' else base_dec
+        elif self.type == 'twos-complement':
+            rev_bin = Binary(''.join(['1' if self.value[i] == '0' else '0' for i in range(len(self.value))]))
+            rev_bin_add = rev_bin.add(Binary(''.join(['1' if i == len(self.value) - 1 else '0' for i in range(len(self.value))])))
+            if rev_bin_add.value[0] == '0' and self.value[0] == '1':
+                rev_bin_add.value = '1' + rev_bin_add.value
+            base_dec = sum([2**(len(rev_bin_add.value) - i - 1) if rev_bin_add.value[i] == '1' else 0 for i in range(len(rev_bin_add.value))])
+            return -base_dec if self.value[0] == '1' else base_dec
+            
 
-    def add(self, num):
+    def add(self, num): # needs to check that types are the same or needs to convert types / choose a type
         if isinstance(num, Binary):
             if len(num.value) == len(self.value):
                 return self._adder(self.value, num.value)
@@ -53,3 +65,7 @@ b1 = Binary('1011', type='unsigned')
 b2 = Binary('0101')
 print(b1.add(b2).value)
 print(b1.add(b2).to_dec())
+b3 = Binary('11011', type='signed')
+print(b3.to_dec())
+b4 = Binary('1110101', type='twos-complement')
+print(b4.to_dec())
