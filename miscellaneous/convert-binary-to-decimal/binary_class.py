@@ -38,11 +38,8 @@ class Binary:
                 if self.type == 'signed':
                     raise InvalidBinaryOperationException(f"Binary addition does not work for signed Binary numbers.")
                 if len(num.value) != len(self.value):
-                    print()
                     warnings.warn(f"Binary numbers are not equal in length. Length of {self.value} != length of {num.value}\n")
-                    print()
                     num.value = ''.join(['0' if num.value[0] == '0' else '1' for _ in range(len(self.value) - len(num.value))]) + num.value
-                    print(num.value)
                 return self._adder(self.value, num.value) 
             else:
                 raise InvalidBinaryOperationException(f"The given binary numbers are not of the same type. Type {self.type} != {num.type}")
@@ -72,10 +69,4 @@ class Binary:
                 final_b = '1' + final_b
         return Binary(str(final_b), type=self.type)
 
-
-
-b1 = Binary('101', type='twos-complement')
-b2 = Binary('001', type='twos-complement')
-b3 = b1.add(b2)
-print(b3.value == '110')
 
