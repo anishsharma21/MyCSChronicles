@@ -1,4 +1,5 @@
 from typing import Literal
+import warnings
 
 BinaryType = Literal['unsigned', 'signed', 'twos-complement']
 
@@ -33,14 +34,18 @@ class Binary:
 
     def add(self, num):
         if isinstance(num, Binary):
-            if len(num.value) == len(self.value) and num.type == self.type:
+            if num.type == self.type:
                 if self.type == 'signed':
                     raise InvalidBinaryOperationException(f"Binary addition does not work for signed Binary numbers.")
+                if len(num.value) != len(self.value):
+                    print()
+                    warnings.warn(f"Binary numbers are not equal in length. Length of {self.value} != length of {num.value}\n")
+                    print()
+                    num.value = ''.join(['0' if num.value[0] == '0' else '1' for _ in range(len(self.value) - len(num.value))]) + num.value
+                    print(num.value)
                 return self._adder(self.value, num.value) 
             else:
-                if len(num.value) != len(self.value): #handle this later by adding zeroes, handle twos-c and unsigned numbers differently though
-                    raise InvalidBinaryOperationException(f"Original binary number not equal in length to new binary number. Length of {self.value} != length of {num.value}\n")
-                raise InvalidBinaryOperationException(f"Given binary numbers are not of the same type. Type {self.type} != {num.type}")
+                raise InvalidBinaryOperationException(f"The given binary numbers are not of the same type. Type {self.type} != {num.type}")
         else:
             raise InvalidBinaryOperationException(f"Input is not of type Binary. Class Binary != {type(num)}")
             
@@ -59,7 +64,7 @@ class Binary:
             else:
                 if b1[i] == b2[i]:
                     carry = '1' if b1[i] == '1' else '0'
-                    final_b = '1' + final_b if b1[i] == '0' else '0' + final_b
+                    final_b = '1' + final_b
                 else:
                     carry = '1'
                     final_b = '0' + final_b
@@ -69,12 +74,8 @@ class Binary:
 
 
 
-b1 = Binary('1000', type='twos-complement')
-print(b1.to_dec())
-b2 = Binary('1111', type='twos-complement')
-print(b2.to_dec())
+b1 = Binary('101', type='twos-complement')
+b2 = Binary('001', type='twos-complement')
 b3 = b1.add(b2)
-print(b3.value)
-print(b3.type)
-print(b3.to_dec())
+print(b3.value == '110')
 
