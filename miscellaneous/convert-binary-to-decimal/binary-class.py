@@ -22,22 +22,28 @@ class Binary:
             base_dec = sum([2**(len(self.value) - i - 1) if self.value[i] == '1' else 0 for i in range(1, len(self.value))])
             return -base_dec if self.value[0] == '1' else base_dec
         elif self.type == 'twos-complement':
-            rev_bin = Binary(''.join(['1' if self.value[i] == '0' else '0' for i in range(len(self.value))]))
-            rev_bin_add = rev_bin.add(Binary(''.join(['1' if i == len(self.value) - 1 else '0' for i in range(len(self.value))])))
-            if rev_bin_add.value[0] == '0' and self.value[0] == '1':
-                rev_bin_add.value = '1' + rev_bin_add.value
+            if self.value[0] == '1':
+                rev_bin = Binary(''.join(['1' if self.value[i] == '0' else '0' for i in range(len(self.value))]))
+                rev_bin_add = rev_bin.add(Binary(''.join(['1' if i == len(self.value) - 1 else '0' for i in range(len(self.value))])))
+            else:
+                rev_bin_add = self
             base_dec = sum([2**(len(rev_bin_add.value) - i - 1) if rev_bin_add.value[i] == '1' else 0 for i in range(len(rev_bin_add.value))])
             return -base_dec if self.value[0] == '1' else base_dec
             
 
-    def add(self, num): # needs to check that types are the same or needs to convert types / choose a type
+    def add(self, num):
         if isinstance(num, Binary):
-            if len(num.value) == len(self.value):
-                return self._adder(self.value, num.value)
+            if len(num.value) == len(self.value) and num.type == self.type:
+                if self.type == 'signed':
+                    raise InvalidBinaryOperationException(f"Binary addition does not work for signed Binary numbers.")
+                return self._adder(self.value, num.value) 
             else:
-                raise InvalidBinaryOperationException(f"Original binary number not equal in length to new binary number. Length of {self.value} != length of {num.value}\n")
+                if len(num.value) != len(self.value): #handle this later by adding zeroes, handle twos-c and unsigned numbers differently though
+                    raise InvalidBinaryOperationException(f"Original binary number not equal in length to new binary number. Length of {self.value} != length of {num.value}\n")
+                raise InvalidBinaryOperationException(f"Given binary numbers are not of the same type. Type {self.type} != {num.type}")
         else:
-            raise InvalidBinaryOperationException("Input is not of type Binary")
+            raise InvalidBinaryOperationException(f"Input is not of type Binary. Class Binary != {type(num)}")
+            
     
     def _adder(self, b1, b2):
         final_b = ''
@@ -59,13 +65,16 @@ class Binary:
                     final_b = '0' + final_b
             if i == 0 and carry == '1':
                 final_b = '1' + final_b
-        return Binary(str(final_b))
+        return Binary(str(final_b), type=self.type)
 
-b1 = Binary('1011', type='unsigned')
-b2 = Binary('0101')
-print(b1.add(b2).value)
-print(b1.add(b2).to_dec())
-b3 = Binary('11011', type='signed')
+
+
+b1 = Binary('1000', type='twos-complement')
+print(b1.to_dec())
+b2 = Binary('1111', type='twos-complement')
+print(b2.to_dec())
+b3 = b1.add(b2)
+print(b3.value)
+print(b3.type)
 print(b3.to_dec())
-b4 = Binary('1110101', type='twos-complement')
-print(b4.to_dec())
+
