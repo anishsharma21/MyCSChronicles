@@ -1,6 +1,6 @@
 # My CS Chronicles
 
-Welcome to My CS Chronicles! This repository is a personal journey through the layers of computer science, starting from the very basics of hardware components and working all the way up to application programming. It's a path of discovery, learning, and documentation of the intricate world of computing from the ground up driven by my passion for all things Computer Science.
+Welcome to My CS Chronicles! This repository is a personal journey through the layers of computer science, starting from the very basics of hardware components and working all the way up to application programming. It's a path of discovery, learning, and documentation of the intricate world of computing from the ground up driven by my passion for all things Computer Science. Check out [the CS Chronicles site](https://anishsharma21.github.io/) where I document my journey through articles and videos.
 
 ## Journey Overview
 
