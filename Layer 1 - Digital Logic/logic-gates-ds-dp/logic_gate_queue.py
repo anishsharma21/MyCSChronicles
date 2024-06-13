@@ -54,16 +54,3 @@ circuit1 = Circuit(gate1)
 circuit1.enqueue(gate2)
 circuit1.enqueue(Gate('NAND'))
 print(circuit1.display_circuit())
-
-
-
-"""
-
-Queue implementation:
-
-Gate objects have references to their type and the next gate in the circuit.
-The last gate in a circuit always has a None reference for next.
-Circuit has references to the first and last gate
-Circuits have enqueue, dequeue, isEmpty and peeking methods.
-
-"""
