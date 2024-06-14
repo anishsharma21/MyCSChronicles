@@ -1,6 +1,9 @@
-def numberOfSteps(self, num: int) -> int:
-        count = 0
-        while num != 0:
-            num = num / 2 if num % 2 == 0 else num - 1
-            count += 1
-        return count
+def canConstruct(ransomNote: str, magazine: str) -> bool:
+    for c in ransomNote:
+        if c in magazine:
+            magazine = magazine.replace(c, '', 1)
+        else:
+            return False
+    return True
+
+print(canConstruct('ab', 'aa'))
