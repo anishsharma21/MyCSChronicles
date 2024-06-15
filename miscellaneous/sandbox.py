@@ -48,3 +48,24 @@ class Solution:
 
     # countApplesAndOranges(5, 9, 2, 12, [3, 6, -2], [4, 5, -5])
 
+
+    def bubble_sort(arr: list):
+        checks = 0
+        for j in range(len(arr)-1, 0, -1):
+            mod = 0
+            for i in range(j):
+                checks += 1
+                value = arr[i]
+                if value > arr[i+1]:
+                    arr[i] = arr[i+1]
+                    arr[i+1] = value
+                    if (i != 0 or i == j - 1) and mod == 0:
+                        return arr, checks
+                    mod+=1
+            if mod == 0:
+                return arr, checks
+        return arr, checks
+    # sorted_arr, checks = bubble_sort([1, 2, 3, 5, 4])
+    # print()
+    # print(f"Checks: {checks}")
+    # print(sorted_arr)
